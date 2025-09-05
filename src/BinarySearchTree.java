@@ -8,7 +8,6 @@
  */
 public class BinarySearchTree<T extends Comparable<T>> implements SortedCollection<T> {
 
-  private int hi;
   /**
    * The root of this BinarySearchTree.
    */
