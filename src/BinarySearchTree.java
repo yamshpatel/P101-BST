@@ -14,8 +14,9 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
    * Inserts a new data value into the sorted collection.
    *
    * @param data the new value being inserted
-   * @throws NullPointerException if data argument is null, we do not allow null values to be stored
-   *                              within a SortedCollection, so an exception is thrown
+   * @throws NullPointerException if data argument is null, we do not allow null values
+   *                              to be stored within a SortedCollection, so an
+   *                              exception is thrown
    */
   @Override
   public void insert(T data) throws NullPointerException {
@@ -61,7 +62,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
     }
     // Same idea but for the right. If the newNode is greater than the subtree's root
     // we know we have to go right.
-    if (newNode.getData().compareTo(subtree.getData()) > 0) {
+    else {
       // If the right subtree is null, we can simply set the new node there.
       if (subtree.getRight() == null) {
         subtree.setRight(newNode);
@@ -91,8 +92,8 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
   }
 
   /**
-   * Performs the binary search tree contains algorithm to recursively look for the provided node.
-   * If the subtree is null, this method does not do anything.
+   * Performs the binary search tree contains algorithm to recursively look for
+   * the provided node. If the subtree is null, this method does not do anything.
    *
    * @param data    the data of the node to find
    * @param subtree the root node of the current subtree we are traversing
@@ -131,8 +132,9 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
   }
 
   /**
-   * Performs the binary search tree size algorithm to recursively add up the total number of nodes.
-   * If the subtree is null, this method does not add to the size
+   * Performs the binary search tree size algorithm to recursively add
+   * up the total number of nodes. If the subtree is null, this method
+   * does not add to the size
    *
    * @param subtree the root node of the current subtree
    * @return the number of values in the collection, including duplicates
@@ -172,7 +174,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
    *
    * @return true if the test passes, false otherwise
    */
-  public static boolean test1() {
+  public boolean test1() {
     // Test Scenario 1: Inserting a null node into the tree
     {
       // Make null Integer
@@ -180,7 +182,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
       BinarySearchTree<Integer> testTree = new BinarySearchTree<>();
       // Try to insert it
       try {
-        testTree.insert(null);
+        testTree.insert(testNode);
         // return false if succeeds
         return false;
       } catch (NullPointerException e) {
@@ -232,7 +234,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
       }
       // Test the right as well
       if (!rootNode.getRight().getData().equals("F")) {
-        System.out.println("The left child was not properly set");
+        System.out.println("The right child was not properly set");
         System.out.println("Expected: F");
         System.out.println("Actual: " + rootNode.getRight().getData());
         return false;
@@ -334,14 +336,295 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
     return true;
   }
 
-  private static boolean test2() {
-    return false;
+  /**
+   * Tests the contains method when finding nodes in both left and right
+   * subtrees as well as the root and interior nodes
+   *
+   * @return true if the test passes, false otherwise
+   */
+  public boolean test2() {
+    // Test Scenario 1: Finding a null value
+    {
+      // Create null data and tree
+      Comparable<Integer> testData = null;
+      BinarySearchTree<Integer> testTree = new BinarySearchTree<>();
+      try {
+        testTree.contains(testData);
+        // Return false if succeeds
+        return false;
+      } catch (NullPointerException e) {
+        // pass message
+        System.out.println("Contains npe caught");
+      } catch (Exception e) {
+        // Catch other exceptions
+        System.out.println("Unexpected exception was caught");
+        return false;
+      }
+    }
+
+    // Test Scenario 2: Find root node
+    {
+      // Make test values
+      Comparable<Integer> testData = 10;
+      BinarySearchTree<Integer> testTree = new BinarySearchTree<>();
+      // Make tree
+      testTree.insert(10);
+      testTree.insert(1);
+      testTree.insert(14);
+      // Try to find the root node
+      if (!testTree.contains(testData)) {
+        System.out.println("The root was not found");
+        return false;
+      }
+    }
+
+    // Test Scenario 3: Finding a left leaf
+    {
+      // Make test values
+      Comparable<String> testData = "C";
+      BinarySearchTree<String> testTree = new BinarySearchTree<>();
+      // Insert all nodes
+      testTree.insert("D");
+      testTree.insert("B");
+      testTree.insert("F");
+      testTree.insert("A");
+      testTree.insert("C");
+      // Try to find the left leaf node
+      if (!testTree.contains(testData)) {
+        System.out.println("The left leaf node was not found");
+        return false;
+      }
+    }
+
+    // Test Scenario 4: Finding a right leaf
+    {
+      // Make test values
+      Comparable<String> testData = "Z";
+      BinarySearchTree<String> testTree = new BinarySearchTree<>();
+      // Insert all nodes
+      testTree.insert("D");
+      testTree.insert("B");
+      testTree.insert("F");
+      testTree.insert("A");
+      testTree.insert("Z");
+      // Try to find the right leaf node
+      if (!testTree.contains(testData)) {
+        System.out.println("The right leaf node was not found");
+        return false;
+      }
+    }
+
+    // Test Scenario 5: Finding an interior node
+    {
+      // Make test values
+      Comparable<String> testData = "F";
+      BinarySearchTree<String> testTree = new BinarySearchTree<>();
+      // Insert all nodes
+      testTree.insert("D");
+      testTree.insert("B");
+      testTree.insert("F");
+      testTree.insert("A");
+      testTree.insert("C");
+      // Try to find the interior node
+      if (!testTree.contains(testData)) {
+        System.out.println("The interior node was not found");
+        return false;
+      }
+    }
+
+    // Test Scenario 6: Trying to find a node that does not exist
+    {
+      // Make test values
+      Comparable<String> testData = "Z";
+      BinarySearchTree<String> testTree = new BinarySearchTree<>();
+      // Insert all nodes
+      testTree.insert("D");
+      testTree.insert("B");
+      testTree.insert("F");
+      testTree.insert("A");
+      testTree.insert("C");
+      // Try to find the non-existent node
+      if (testTree.contains(testData)) {
+        System.out.println("The non-existent node was found");
+        return false;
+      }
+    }
+
+    return true;
   }
 
+  /**
+   * Tests the size, clear, and isEmpty methods by building and clearing a few different trees
+   *
+   * @return true if the test passes, false otherwise
+   */
+  public boolean test3() {
+    // Test Scenario 1: Size test and clear an empty tree
+    {
+      BinarySearchTree<Integer> testTree = new BinarySearchTree<>();
+      // Test size
+      if (testTree.size() != 0) {
+        System.out.println("The size is incorrect");
+        System.out.println("Expected: " + 0);
+        System.out.println("Actual: " + testTree.size());
+        return false;
+      }
+      // Test clearing
+      testTree.clear();
+      // Size should still be 0
+      if (testTree.size() != 0) {
+        System.out.println("The size is incorrect");
+        System.out.println("Expected: " + 0);
+        System.out.println("Actual: " + testTree.size());
+        return false;
+      }
+    }
+
+    // Test Scenario 2: Single node tree
+    {
+      BinarySearchTree<Integer> testTree = new BinarySearchTree<>();
+      // Insert node
+      testTree.insert(4);
+      // Test size
+      if (testTree.size() != 1) {
+        System.out.println("The size is incorrect");
+        System.out.println("Expected: " + 1);
+        System.out.println("Actual: " + testTree.size());
+        return false;
+      }
+      // isEmpty should return false
+      if (testTree.isEmpty()) {
+        System.out.println("isEmpty returned true, but should be false");
+        return false;
+      }
+      // Test clearing
+      testTree.clear();
+      // Size should be updated
+      if (testTree.size() != 0) {
+        System.out.println("The size is incorrect");
+        System.out.println("Expected: " + 0);
+        System.out.println("Actual: " + testTree.size());
+        return false;
+      }
+      // isEmpty should return true
+      if (!testTree.isEmpty()) {
+        System.out.println("isEmpty returned false, but should be true");
+        return false;
+      }
+    }
+
+    // Test Scenario 3: Multi-node tree
+    {
+      BinarySearchTree<Integer> testTree = new BinarySearchTree<>();
+      // Insert all nodes
+      testTree.insert(4);
+      testTree.insert(2);
+      testTree.insert(6);
+      testTree.insert(1);
+      testTree.insert(3);
+      // Test size
+      if (testTree.size() != 5) {
+        System.out.println("The size is incorrect");
+        System.out.println("Expected: " + 5);
+        System.out.println("Actual: " + testTree.size());
+        return false;
+      }
+      // isEmpty should return false
+      if (testTree.isEmpty()) {
+        System.out.println("isEmpty returned true, but should be false");
+        return false;
+      }
+      // Test clearing
+      testTree.clear();
+      // Size should be updated
+      if (testTree.size() != 0) {
+        System.out.println("The size is incorrect");
+        System.out.println("Expected: " + 0);
+        System.out.println("Actual: " + testTree.size());
+        return false;
+      }
+      // isEmpty should return true
+      if (!testTree.isEmpty()) {
+        System.out.println("isEmpty returned false, but should be true");
+        return false;
+      }
+    }
+
+    // Test Scenario 4: Tree with duplicates
+    {
+      BinarySearchTree<String> testTree = new BinarySearchTree<>();
+      // Insert all nodes
+      testTree.insert("D");
+      testTree.insert("B");
+      testTree.insert("F");
+      testTree.insert("A");
+      testTree.insert("D");
+      // Test size
+      if (testTree.size() != 5) {
+        System.out.println("The size is incorrect");
+        System.out.println("Expected: " + 5);
+        System.out.println("Actual: " + testTree.size());
+        return false;
+      }
+      // Test clearing
+      testTree.clear();
+      // Size should be updated
+      if (testTree.size() != 0) {
+        System.out.println("The size is incorrect");
+        System.out.println("Expected: " + 0);
+        System.out.println("Actual: " + testTree.size());
+        return false;
+      }
+    }
+
+    // Test Scenario 5: Rebuilding tree after clearing it
+    {
+      BinarySearchTree<String> testTree = new BinarySearchTree<>();
+      // Insert all nodes
+      testTree.insert("D");
+      testTree.insert("B");
+      testTree.insert("F");
+      testTree.insert("A");
+      testTree.insert("D");
+      // Test clearing
+      testTree.clear();
+      // Size should be updated
+      if (testTree.size() != 0) {
+        System.out.println("The size is incorrect");
+        System.out.println("Expected: " + 0);
+        System.out.println("Actual: " + testTree.size());
+        return false;
+      }
+      // Rebuild tree
+      testTree.insert("D");
+      testTree.insert("B");
+      testTree.insert("F");
+      testTree.insert("A");
+      testTree.insert("C");
+      // Size should be updated
+      if (testTree.size() != 5) {
+        System.out.println("The size is incorrect");
+        System.out.println("Expected: " + 5);
+        System.out.println("Actual: " + testTree.size());
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * The main method that calls each test method using an instantiated BST
+   *
+   * @param args unused
+   */
   public static void main(String[] args) {
+    // Make a BST to use test methods
+    BinarySearchTree<Integer> testTree = new BinarySearchTree<>();
+    // Call each test method and provide feedback
     System.out.println("Testing BST implementation...");
-    System.out.println("test1: " + test1());
-    System.out.println("test2: " + test2());
+    System.out.println("test1: " + testTree.test1());
+    System.out.println("test2: " + testTree.test2());
+    System.out.println("test3: " + testTree.test3());
   }
-
 }
